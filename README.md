@@ -1,2 +1,2 @@
-#database connectivity related diffrent operations
+#database connectivity related diffrent operations 
 
