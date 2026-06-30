@@ -1,5 +1,7 @@
 from reportlab.platypus import SimpleDocTemplate, Table
 import sqlite3
+import smtplib
+from email.message import EmailMessage
 con = sqlite3.connect("sms.db")
 cur = con.cursor()
 
@@ -13,8 +15,8 @@ while True:
     print("5. Delete Student")
     print("6. Result")
     print("7. Reports")
-    print("8.download result")
-    print("8. Exit")
+    print("8. download result")
+    print("9. Exit")
    
 
     choice = int(input("Enter Choice : "))
@@ -241,8 +243,8 @@ while True:
          match ch:
 
           case 1:
-              print("\n1.one student")
-              print("\n2.all student")
+              print("1.one student")
+              print("2.all student")
               ch=int(input("enter choice:"))
               
               match ch:
@@ -272,10 +274,10 @@ while True:
                 case 2:
                    
                  
-                 cur.execute("SELECT * FROM student where id=?",(sid,))
+                 cur.execute("SELECT * FROM student")
                  data = cur.fetchall()
 
-                 pdf = SimpleDocTemplate("student_report.pdf")
+                 pdf = SimpleDocTemplate("student_all_report.pdf")
 
                  table_data = [
                   ["ID", "NAME", "AGE", "CITY", "JAVA", "PYTHON", "CPP", "DATABASE", "TOTAL", "PERCENTAGE"]
@@ -293,7 +295,34 @@ while True:
                  print("PDF Generated Successfully")
                
           case 2:
-            print("share to mail")
+
+                receiver_email = input("Enter Email: ")
+
+                msg = EmailMessage()
+                msg["Subject"] = "Student Result"
+                msg["From"] = "yourgmail@gmail.com"
+                msg["To"] = receiver_email
+
+                msg.set_content("Student Result PDF Attached")
+
+                with open("student_report.pdf", "rb") as f:
+                    msg.add_attachment(
+                        f.read(),
+                        maintype="application",
+                        subtype="pdf",
+                        filename="student_report.pdf"
+                    )
+
+                server = smtplib.SMTP("smtp.gmail.com", 587)
+                server.starttls()
+                server.login(
+                    "shitoletrupti6@gmail.com",
+                    "gkgg kjfe enrl jdmm"
+                      )
+                server.send_message(msg)
+                server.quit()
+
+                print("Email Sent Successfully")
 
           case _:
              print("Invalid Choice")                
