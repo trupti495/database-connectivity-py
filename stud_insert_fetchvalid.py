@@ -8,10 +8,8 @@ cursor=conn.cursor()
 records = [
     (3, "Rahul", 18),
     (4, "Priya", 20),
-    (5, "Amit", 25),
-    (6, "Sneha", 27),
-    (7, "Rohan", 22)
-]
+    (5, "Amit", 25)
+    ]
 
 cursor.executemany("INSERT INTO stud VALUES (?, ?, ?)", records)
 
